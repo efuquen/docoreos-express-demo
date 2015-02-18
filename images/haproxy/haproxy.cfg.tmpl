@@ -1,0 +1,39 @@
+global
+  log     127.0.0.1 local0 notice
+  user    haproxy
+  group   haproxy
+
+defaults
+  log     global
+  mode    http
+  option  httplog
+  option  dontlognull
+  retries 3
+  timeout connect 10000
+  timeout client  15000
+  timeout server  15000
+
+listen stats 0.0.0.0:81
+  mode http
+  stats enable
+  stats hide-version
+  stats refresh 30s
+  stats uri /
+
+listen frontend 0.0.0.0:80
+  mode    http
+
+  balance roundrobin
+  option  httpclose
+  option  forwardfor
+
+  use_backend express_demo
+
+backend express_demo 
+  mode http
+  option httpchk OPTIONS /
+  balance roundrobin
+  {{range gets "/services/docoreos-express-demo/*"}}
+  server {{base .Key}} {{.Value}} check inter 5s
+  {{end}}
+

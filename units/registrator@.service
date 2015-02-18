@@ -1,0 +1,21 @@
+[Unit]
+Description=registrator
+Documentation=https://github.com/progrium/registrator
+X-Image=progrium/registrator:master
+
+[Service]
+EnvironmentFile=/etc/environment
+ExecStartPre=/usr/bin/docker pull progrium/registrator:master
+ExecStart=/bin/sh -c "docker run \
+  --name %p.%i \
+  -v /var/run/docker.sock:/tmp/docker.sock \
+  progrium/registrator:master -ip $COREOS_PRIVATE_IPV4 etcd://$COREOS_PRIVATE_IPV4:4001/services"
+ExecStop=/usr/bin/docker rm -f %p.%i
+TimeoutStartSec=180s
+TimeoutStopSec=30s
+RestartSec=30s
+Restart=on-failure
+
+[X-Fleet]
+X-Conflicts=%p@*.service
+MachineMetadata=role=web

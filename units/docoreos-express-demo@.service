@@ -1,0 +1,24 @@
+[Unit]
+Description=DO CoreOS Express Demo
+Documentation=https://github.com/efuquen/docoreos-express-demo
+X-Image=quay.io/efuquen/docoreos-express-demo
+
+[Service]
+EnvironmentFile=/etc/environment
+ExecStartPre=-/usr/bin/docker kill %p.%i
+ExecStartPre=-/usr/bin/docker rm -f %p.%i
+ExecStartPre=/usr/bin/docker pull quay.io/efuquen/docoreos-express-demo
+ExecStart=/bin/sh -c "docker run --rm \
+  --name %p.%i \
+  --publish 80:3000 \
+  quay.io/efuquen/docoreos-express-demo"
+ExecStop=/usr/bin/docker rm -f %p.%i
+User=core
+TimeoutStartSec=180s
+TimeoutStopSec=30s
+RestartSec=30s
+Restart=on-failure
+
+[X-Fleet]
+X-Conflicts=%p@*.service
+MachineMetadata=role=web

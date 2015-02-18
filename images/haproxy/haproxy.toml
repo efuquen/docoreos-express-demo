@@ -1,0 +1,7 @@
+[template]
+src = "haproxy.cfg.tmpl"
+dest = "/etc/haproxy/haproxy.cfg"
+keys = [
+  "/services/docoreos-express-demo/"
+]
+reload_cmd = "/usr/sbin/service haproxy reload"

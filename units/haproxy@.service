@@ -1,0 +1,24 @@
+[Unit]
+Description=haproxy
+Documentation=http://www.haproxy.org/
+X-Image=quay.io/efuquen/docoreos-express-demo-haproxy
+
+[Service]
+EnvironmentFile=/etc/environment
+ExecStartPre=/usr/bin/docker pull quay.io/efuquen/docoreos-express-demo-haproxy
+ExecStart=/bin/sh -c "/usr/bin/docker run \
+  --name %p.%i \
+  -p 80:80 \
+  -p 81:81 \
+  -e COREOS_PRIVATE_IPV4=$COREOS_PRIVATE_IPV4 \
+  quay.io/efuquen/docoreos-express-demo-haproxy"
+ExecStop=/usr/bin/docker rm -f %p.%i
+User=core
+TimeoutStartSec=180s
+TimeoutStopSec=30s
+RestartSec=30s
+Restart=on-failure
+
+[X-Fleet]
+X-Conflicts=%p@*.service
+MachineMetadata=role=lb
