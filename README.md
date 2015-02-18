@@ -1,4 +1,4 @@
-# DO CoreOS Express Demo
+# DigitalOcean CoreOS Express Demo
 
 Demo repo that will stand up CoreOS instances on Digital Ocean and deploy
 a simply NodeJS hello world app to that infastructure.  Also sets up HAProxy
