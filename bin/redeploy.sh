@@ -18,6 +18,7 @@ echo "IP: $DO_IP"
 ssh core@$DO_IP fleetctl destroy docoreos-express-demo@1.service
 sleep 10 
 ssh core@$DO_IP fleetctl start docoreos-express-demo@1.service
+
 ssh core@$DO_IP fleetctl destroy docoreos-express-demo@2.service
 sleep 10 
 ssh core@$DO_IP fleetctl start docoreos-express-demo@2.service

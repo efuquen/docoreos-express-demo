@@ -10,7 +10,7 @@ ExecStartPre=-/usr/bin/docker rm -f %p.%i
 ExecStartPre=/usr/bin/docker pull quay.io/efuquen/docoreos-express-demo
 ExecStart=/bin/sh -c "docker run --rm \
   --name %p.%i \
-  --publish 80:3000 \
+  --publish 3000 \
   quay.io/efuquen/docoreos-express-demo"
 ExecStop=/usr/bin/docker rm -f %p.%i
 User=core
